@@ -14,7 +14,7 @@ func (e *AppError) Error() string {
 
 type NotEnoughMoneyError struct {
 	Message        string    `json:"message"`
-	Id             uuid.UUID `json:"id"`
+	WalletId       uuid.UUID `json:"wallet_id"`
 	CurrentBalance float64   `json:"current_balance"`
 	MoneyTransfer  float64   `json:"money_transfer"`
 }

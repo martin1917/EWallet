@@ -35,7 +35,7 @@ func (h SendModeyRequestHandler) Handle(req SendModeyRequest) error {
 	if w.Balance < req.Amount {
 		return &errors.NotEnoughMoneyError{
 			Message:        "Not enough money",
-			Id:             w.Id,
+			WalletId:       w.Id,
 			CurrentBalance: w.Balance,
 			MoneyTransfer:  req.Amount,
 		}
