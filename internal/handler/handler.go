@@ -32,16 +32,18 @@ func (h *Handler) Send(w http.ResponseWriter, r *http.Request) {
 
 	err = h.Services.Commands.SendModeyHandler.Handle(sendMoneyRequest)
 	if err != nil {
-		if serr, ok := err.(*errors.AppError); ok {
+		switch err.(type) {
+		case *errors.AppError, *errors.NotEnoughMoneyError:
 			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(serr)
-		} else {
+			json.NewEncoder(w).Encode(err)
+			return
+		default:
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]string{
 				"message": "transaction are failed",
 			})
+			return
 		}
-		return
 	}
 
 	w.WriteHeader(http.StatusOK)

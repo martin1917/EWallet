@@ -33,10 +33,12 @@ func (h SendModeyRequestHandler) Handle(req SendModeyRequest) error {
 	}
 
 	if w.Balance < req.Amount {
-		message := fmt.Sprintf("Not enough money in wallet(%s). Current balance = %f. Money transfer = %f",
-			w.Id, w.Balance, req.Amount)
-
-		return &errors.AppError{Message: message}
+		return &errors.NotEnoughMoneyError{
+			Message:        "Not enough money",
+			Id:             w.Id,
+			CurrentBalance: w.Balance,
+			MoneyTransfer:  req.Amount,
+		}
 	}
 
 	return h.transaction_repository.Create(
